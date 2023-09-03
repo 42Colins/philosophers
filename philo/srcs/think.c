@@ -18,8 +18,8 @@ static int	take_fork(t_philo *philo, int num, int oldnum);
 int	freud(t_philo *philo, int num)
 {
 	pthread_mutex_lock(&philo->data->modif);
-	if (philo->data->death == 1 || \
-		(philo->data->done_dinners == philo->data->nbr_of_dinner - 1))
+	if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+		(philo->data->death == DEAD))
 	{
 		pthread_mutex_unlock(&philo->data->modif);
 		return (-1);
@@ -38,22 +38,26 @@ static int	search_fork(t_philo *philo, int num)
 		left_num = philo->data->nbr_of_philos - 1;
 	else
 		left_num = num - 1;
-	if (philo->num % 2 == 1)
+	if (num % 2 == 1)
 	{
 		if (take_fork(philo, left_num, -1) == -1)
 			return (-1);
 	}
 	else
+	{
 		if (take_fork(philo, num, -1) == -1)
 			return (-1);
-	if (philo->num % 2 == 1)
+	}
+	if (num % 2 == 1)
 	{
 		if (take_fork(philo, num, left_num) == -1)
 			return (-1);
 	}
 	else
+	{
 		if (take_fork(philo, left_num, num) == -1)
 			return (-1);
+	}
 	return (0);
 }
 
@@ -62,8 +66,8 @@ static int	take_fork(t_philo *philo, int num, int oldnum)
 	while (1)
 	{
 		pthread_mutex_lock(&philo->data->modif);
-		if (philo->data->death == 1 || \
-			(philo->data->done_dinners == philo->data->nbr_of_dinner - 1))
+		if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+			(philo->data->death == DEAD))
 		{
 			if (oldnum != -1 && philo->data->forks[oldnum] != FREE)
 				philo->data->forks[oldnum] = FREE;

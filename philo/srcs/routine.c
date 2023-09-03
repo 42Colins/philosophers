@@ -22,9 +22,10 @@ void	handle_philos(t_philo *philo)
 	while (1)
 	{
 		pthread_mutex_lock(&philo->data->modif);
-		if ((philo->data->done_dinners >= philo->data->nbr_of_dinner) || \
-			(philo->data->death == DEAD) || is_anyone_dead(philo) == DEAD)
+		if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+			(philo->data->death == DEAD) || (is_anyone_dead(philo) == DEAD))
 		{
+			// printf("%d\n", philo->data->done_dinners);
 			pthread_mutex_unlock(&philo->data->modif);
 			break ;
 		}
@@ -47,6 +48,8 @@ static void	routine(t_philo *philo, int num)
 	num = philo->num - 1;
 	if (print_timestamp(philo, "THINK") == -1)
 		return ;
+	if (philo->nbr_of_meals == 0 && philo->num % 2 == 1)
+		usleep(10000);
 	if (freud(philo, num) == -1)
 		return ;
 	if (print_timestamp(philo, "EAT") == -1)

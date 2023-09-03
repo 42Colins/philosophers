@@ -88,6 +88,8 @@ t_data	*handle_parameters(int count, char **values)
 	data->nbr_of_philos = ft_atoi(values[1]);
 	if (count == 4)
 		data->nbr_of_dinner = ft_atoi(values[5]);
+	else
+		data->nbr_of_dinner = -1;
 	data->sleep_time = ft_atoi(values[4]);
 	data->eat_time = ft_atoi(values[3]);
 	data->death_timer = ft_atoi(values[2]);

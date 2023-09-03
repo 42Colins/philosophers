@@ -48,7 +48,6 @@ $(DIR_OBJ)%.o: %.c $(HEADERS)
 
 $(NAME) :		$(OBJS)
 				$(CC) $(OBJS) -lpthread -o $(NAME)
-
 clean :
 				$(RM) $(OBJS)
 

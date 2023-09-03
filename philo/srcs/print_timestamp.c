@@ -31,7 +31,8 @@ int	print_timestamp(t_philo *philo, char *str)
 		time - philo->creation_time, philo->num);
 	pthread_mutex_unlock(&philo->data->mutex);
 	pthread_mutex_lock(&philo->data->modif);
-	if (philo->data->death == 1 || (philo->data->done_dinners == philo->data->nbr_of_dinner - 1))
+	if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+		(philo->data->death == DEAD))
 	{
 		pthread_mutex_unlock(&philo->data->modif);
 		return (-1);
@@ -49,6 +50,7 @@ int	print_timestamp(t_philo *philo, char *str)
 		pthread_mutex_lock(&philo->data->mutex);
 		printf("%ld %d is sleeping\n", time - philo->creation_time, philo->num);
 		pthread_mutex_unlock(&philo->data->mutex);
+		return (0);
 	}
 	return (next_print_timestamp(philo, str, time));
 }
@@ -57,6 +59,10 @@ static int	next_print_timestamp(t_philo *philo, char *str, long time)
 {
 	if (ft_strncmp(str, "EAT", ft_strlen(str)) == 0)
 	{
+		pthread_mutex_lock(&philo->data->mutex);
+		printf("\033[0;35m%ld %d is eating\033[0m\n", time - philo->creation_time, philo->num);
+		pthread_mutex_unlock(&philo->data->mutex);
+		philo->last_meal = time;
 		pthread_mutex_lock(&philo->data->modif);
 		if (do_i_have_time(philo, 0) == DEAD)
 		{
@@ -64,10 +70,6 @@ static int	next_print_timestamp(t_philo *philo, char *str, long time)
 			return (-1);
 		}
 		pthread_mutex_unlock(&philo->data->modif);
-		pthread_mutex_lock(&philo->data->mutex);
-		printf("\033[0;35m%ld %d is eating\033[0m\n", time - philo->creation_time, philo->num);
-		pthread_mutex_unlock(&philo->data->mutex);
-		philo->last_meal = time;
 	}
 	else
 	{
