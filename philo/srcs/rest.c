@@ -16,7 +16,7 @@ int	ft_sleep(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->modif);
 	if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
-		(philo->data->death == DEAD))
+		(philo->data->death == DEAD) || (is_anyone_dead(philo) == DEAD))
 	{
 		pthread_mutex_unlock(&philo->data->modif);
 		return (-1);

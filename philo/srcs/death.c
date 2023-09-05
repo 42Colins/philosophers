@@ -32,8 +32,8 @@ int	is_anyone_dead(t_philo *philo)
 	{
 		if (((time - philo->last_meal) >= philo->data->death_timer))
 		{
-			// printf("%d\n", philo->data->done_dinners);
 			philo->alive = DEAD;
+			philo->data->death = DEAD;
 			return (DEAD);
 		}
 	}

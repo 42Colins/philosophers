@@ -21,29 +21,13 @@ int	devourer(t_philo *philo, int num)
 	else
 		tmp = num - 1;
 	pthread_mutex_lock(&philo->data->modif);
-	if (num % 2 == 1)
-	{
-		if (philo->data->forks[tmp] != FREE)
-			philo->data->forks[tmp] = FREE;
-	}
-	else
-	{
-		if (philo->data->forks[num] != FREE)
-			philo->data->forks[num] = FREE;
-	}
-	if (num % 2 == 1)
-	{
-		if (philo->data->forks[num] != FREE)
-			philo->data->forks[num] = FREE;
-	}
-	else
-	{
-		if (philo->data->forks[tmp] != FREE)
-			philo->data->forks[tmp] = FREE;
-	}
+	if (philo->data->forks[num] != FREE)
+		philo->data->forks[num] = FREE;
+	if (philo->data->forks[tmp] != FREE)
+		philo->data->forks[tmp] = FREE;
 	philo->nbr_of_meals += 1;
 	if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
-		(philo->data->death == DEAD))
+		(philo->data->death == DEAD) || (is_anyone_dead(philo) == DEAD)) 
 	{
 		pthread_mutex_unlock(&philo->data->modif);
 		return (-1);
