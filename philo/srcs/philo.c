@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:36:05 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/02 19:37:01 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/08 19:45:48 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,13 @@
 void	do_philosophers(t_data *data)
 {
 	int		i;
+	pthread_mutex_t	mutex;
 	t_philo	*philo;
 
+	pthread_mutex_init(&mutex, NULL);
 	i = 0;
-	philo = initiate_philos(data);
+	philo = initiate_philos(data, mutex);
+	pthread_mutex_lock(&mutex);
 	while (i < data->nbr_of_philos)
 	{
 		if (pthread_create(&philo[i].tid, NULL, \
@@ -27,6 +30,7 @@ void	do_philosophers(t_data *data)
 		else
 			i++;
 	}
+	pthread_mutex_unlock(&mutex);
 	i = 0;
 	while (i < data->nbr_of_philos)
 	{
@@ -50,7 +54,7 @@ void	free_everything(t_data *data)
 	free(data->forks);
 }
 
-t_philo	*initiate_philos(t_data *data)
+t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex)
 {
 	int				index;
 	long			time;
@@ -59,7 +63,7 @@ t_philo	*initiate_philos(t_data *data)
 
 	if (gettimeofday(&tv, NULL) == -1)
 		return (NULL);
-	time = (long)(tv.tv_usec * 0.001 + tv.tv_sec * 1000);
+	time = (tv.tv_usec * 0.001 + tv.tv_sec * 1000);
 	index = 0;
 	philo = malloc(sizeof(t_philo) * data->nbr_of_philos);
 	if (!philo)
@@ -74,6 +78,7 @@ t_philo	*initiate_philos(t_data *data)
 		philo[index].alive = ALIVE;
 		index++;
 	}
+	philo->mutex = mutex;
 	return (philo);
 }
 
@@ -86,10 +91,9 @@ t_data	*handle_parameters(int count, char **values)
 
 	data = malloc(sizeof(t_data));
 	data->nbr_of_philos = ft_atoi(values[1]);
+	data->nbr_of_dinner = -1;
 	if (count == 4)
 		data->nbr_of_dinner = ft_atoi(values[5]);
-	else
-		data->nbr_of_dinner = -1;
 	data->sleep_time = ft_atoi(values[4]);
 	data->eat_time = ft_atoi(values[3]);
 	data->death_timer = ft_atoi(values[2]);
@@ -100,10 +104,9 @@ t_data	*handle_parameters(int count, char **values)
 	while (index < data->nbr_of_philos)
 	{
 		pthread_mutex_init(&forks[index], NULL);
-		disponibility[index] = FREE;
-		index++;
+		disponibility[index++] = FREE;
 	}
 	pthread_mutex_init(&data->modif, NULL);
-	return (data->death = 0, data->done_dinners = 0, \
+	return (data->death = 0, data->done_dinners = 0, data->count = 0, \
 			data->forks = disponibility, data->forchetta = forks, data);
 }

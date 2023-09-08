@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:51 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/02 23:20:02 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/08 19:44:44 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@ void	handle_philos(t_philo *philo)
 	int	num;
 
 	num = 0;
+	pthread_mutex_lock(&philo->mutex);
+	pthread_mutex_unlock(&philo->mutex);
 	while (1)
 	{
 		pthread_mutex_lock(&philo->data->modif);
-		if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
-			(philo->data->death == DEAD) || (is_anyone_dead(philo) == DEAD))
+		if ((philo->data->nbr_of_dinner != -1 && \
+			(philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+			(philo->data->death == DEAD))
 		{
-			// printf("%d\n", philo->data->done_dinners);
 			pthread_mutex_unlock(&philo->data->modif);
 			break ;
 		}
@@ -48,13 +50,14 @@ static void	routine(t_philo *philo, int num)
 	num = philo->num - 1;
 	if (print_timestamp(philo, "THINK") == -1)
 		return ;
-	if (philo->nbr_of_meals == 0 && philo->num % 2 == 1)
-		usleep(10000);
+	if ((philo->nbr_of_meals == 0 && philo->data->done_dinners == 0) && philo->num % 2 == 1)
+		ft_usleep(philo, 1);
 	if (freud(philo, num) == -1)
 		return ;
 	if (print_timestamp(philo, "EAT") == -1)
 		return ;
-	usleep(philo->data->eat_time * 1000);
+	if (ft_usleep(philo, philo->data->eat_time) == -1)
+		return ;
 	if (devourer(philo, num) == -1)
 		return ;
 	if (print_timestamp(philo, "SLEEP") == -1)

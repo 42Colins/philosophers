@@ -12,7 +12,7 @@
 
 NAME = philo
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 
 RM = $(RM) -f
 
@@ -47,7 +47,7 @@ $(DIR_OBJ)%.o: %.c $(HEADERS)
 				$(CC) $(CFLAGS) -I inc -c $< -o $@
 
 $(NAME) :		$(OBJS)
-				$(CC) $(OBJS) -lpthread -o $(NAME)
+				$(CC) $(OBJS) -lpthread -o $(NAME) -g3
 clean :
 				$(RM) $(OBJS)
 

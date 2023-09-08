@@ -3,40 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:30:20 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/02 23:25:17 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/08 19:20:53 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "philo.h"
 
 int	is_anyone_dead(t_philo *philo)
 {
 	int				index;
-	struct timeval	checktv;
 	long			time;
 
-	if (gettimeofday(&checktv, NULL) == -1)
-		return (DEAD);
-	time = (checktv.tv_usec * 0.001 + checktv.tv_sec * 1000);
 	index = 0;
-	if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+	if ((philo->data->nbr_of_dinner != -1 && \
+		(philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
 		(philo->data->death == DEAD))
 		return (DEAD);
 	if (philo->last_meal == 0)
 		philo->last_meal = philo->creation_time;
-	while (index++ < philo->data->nbr_of_philos)
+	time = ft_get_time();
+	if ((time - philo->last_meal) > philo->data->death_timer)
 	{
-		if (((time - philo->last_meal) >= philo->data->death_timer))
-		{
-			philo->alive = DEAD;
-			philo->data->death = DEAD;
-			return (DEAD);
-		}
-	}
+		// printf("last : %ld, current : %ld, death timer : %d \n", philo->last_meal, time, philo->data->death_timer);
+		// printf("calc : %ld , death %d\n", time - philo->last_meal, philo->data->death_timer);
+		// puts("why do i die");
+		philo->alive = DEAD;
+		philo->data->death = DEAD;
+		return (DEAD);
+	}	
 	return (ALIVE);
 }
 
@@ -55,19 +52,23 @@ int	do_i_have_time(t_philo *philo, int mode)
 	t = (checktv.tv_usec * 0.001 + checktv.tv_sec * 1000);
 	if (philo->last_meal == 0)
 		philo->last_meal = philo->creation_time;
-	if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)))
-		return (DEAD);
-	// printf("death  + last meal: %ld, time + t : %ld\n", philo->last_meal + philo->data->death_timer, t);
+	pthread_mutex_lock(&philo->data->modif);
+	if ((philo->data->nbr_of_dinner != -1 && \
+		(philo->data->done_dinners >= philo->data->nbr_of_dinner)))
+		return (pthread_mutex_unlock(&philo->data->modif), DEAD);
+	pthread_mutex_unlock(&philo->data->modif);
 	if ((t - philo->last_meal + time) >= philo->data->death_timer)
 	{
-		// printf("t - last meal + t : %ld , death : %d, calc : %ld\n", (t - philo->last_meal + time), philo->data->death_timer, (t - philo->last_meal + time) - philo->data->death_timer);
-		if (t - philo->last_meal > philo->data->death_timer)
-			return (ALIVE);
 		usleep((philo->data->death_timer - (t - philo->last_meal)) * 1000);
-		philo->data->death = 1;
-		philo->alive = DEAD;
-		// printf("%d\n", philo->data->done_dinners);
-		return (DEAD);
+		kill_philo(philo);
+		return (philo->alive = DEAD, DEAD);
 	}
 	return (ALIVE);
+}
+
+void	kill_philo(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->modif);
+	philo->data->death = 1;
+	pthread_mutex_unlock(&philo->data->modif);
 }

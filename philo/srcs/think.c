@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   think.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:30 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/02 23:12:47 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/08 18:50:01 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ static int	take_fork(t_philo *philo, int num, int oldnum);
 int	freud(t_philo *philo, int num)
 {
 	pthread_mutex_lock(&philo->data->modif);
-	if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
-		(philo->data->death == DEAD) || (is_anyone_dead(philo) == DEAD))
+	if ((philo->data->nbr_of_dinner != -1 && \
+		(philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+		(philo->data->death == DEAD))
 	{
 		pthread_mutex_unlock(&philo->data->modif);
 		return (-1);
@@ -34,7 +35,7 @@ static int	search_fork(t_philo *philo, int num)
 {
 	int	left_num;
 
-	if (philo->num == 1)
+	if (num == 0)
 		left_num = philo->data->nbr_of_philos - 1;
 	else
 		left_num = num - 1;
@@ -50,7 +51,8 @@ static int	take_fork(t_philo *philo, int num, int oldnum)
 	while (1)
 	{
 		pthread_mutex_lock(&philo->data->modif);
-		if ((philo->data->nbr_of_dinner != -1 && (philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+		if ((philo->data->nbr_of_dinner != -1 && \
+			(philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
 			(philo->data->death == DEAD) || (is_anyone_dead(philo) == DEAD))
 		{
 			if (oldnum != -1 && philo->data->forks[oldnum] != FREE)

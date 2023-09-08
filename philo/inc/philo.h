@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 18:19:24 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/02 23:10:34 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/08 19:45:23 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ enum e_life {
 };
 
 typedef struct s_data {
+	int				count;
 	int				death;
 	int				sleep_time;
 	int				eat_time;
@@ -52,6 +53,7 @@ typedef struct s_philo {
 	int				nbr_of_meals;
 	long			last_meal;
 	long			creation_time;
+	pthread_mutex_t mutex;
 }	t_philo;
 
 //ft_atoi.c
@@ -63,25 +65,28 @@ size_t	ft_strlen(const char *s);
 void	handle_philos(t_philo *philo);
 
 //think.c
-int	freud(t_philo *philo, int num);
+int		freud(t_philo *philo, int num);
 
 //dinner.c
-int	devourer(t_philo *philo, int num);
+int		devourer(t_philo *philo, int num);
 
 //rest.c
-int	ft_sleep(t_philo *philo);
+int		ft_sleep(t_philo *philo);
+int		ft_usleep(t_philo *philo, int	rest);
 
 //death.c
 int		is_anyone_dead(t_philo *philo);
 int		do_i_have_time(t_philo *philo, int time);
+void	kill_philo(t_philo *philo);
 
 //print_timestamp.c
 int		print_timestamp(t_philo *philo, char *str);
+long	ft_get_time();
 
 //philo.c
 void	do_philosophers(t_data *data);
 void	free_everything(t_data *data);
-t_philo	*initiate_philos(t_data *data);
+t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex);
 t_data	*handle_parameters(int count, char **values);
 
 #endif
