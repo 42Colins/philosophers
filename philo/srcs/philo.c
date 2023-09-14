@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:36:05 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/08 19:45:48 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/14 23:45:51 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 void	do_philosophers(t_data *data)
 {
-	int		i;
+	int				i;
 	pthread_mutex_t	mutex;
-	t_philo	*philo;
+	t_philo			*philo;
 
 	pthread_mutex_init(&mutex, NULL);
 	i = 0;
 	philo = initiate_philos(data, mutex);
-	pthread_mutex_lock(&mutex);
 	while (i < data->nbr_of_philos)
 	{
 		if (pthread_create(&philo[i].tid, NULL, \
@@ -30,7 +29,6 @@ void	do_philosophers(t_data *data)
 		else
 			i++;
 	}
-	pthread_mutex_unlock(&mutex);
 	i = 0;
 	while (i < data->nbr_of_philos)
 	{

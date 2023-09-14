@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_timestamp.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:38:13 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/08 19:01:31 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/14 23:46:33 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static int	next_print_timestamp(t_philo *philo, char *str, long time);
 static int	next_next_print_timestamp(t_philo *philo, char *str, long time);
 static int	final_print_timestamp(t_philo *philo, char *str, long time);
-long		ft_get_time();
 
 int	print_timestamp(t_philo *philo, char *str)
 {
@@ -24,7 +23,7 @@ int	print_timestamp(t_philo *philo, char *str)
 	time = 0;
 	pthread_mutex_lock(&philo->data->modif);
 	if ((philo->data->nbr_of_dinner != -1 && \
-		(philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+		(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
 		((philo->data->death == DEAD) && philo->data->count > 0))
 		return (pthread_mutex_unlock(&philo->data->modif), -1);
 	else
@@ -80,7 +79,7 @@ static int	final_print_timestamp(t_philo *philo, char *str, long time)
 {
 	pthread_mutex_lock(&philo->data->modif);
 	if ((philo->data->nbr_of_dinner != -1 && \
-		(philo->data->done_dinners >= philo->data->nbr_of_dinner)) || \
+		(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
 		((philo->data->death == DEAD) && philo->data->count > 0))
 		return (pthread_mutex_unlock(&philo->data->modif), -1);
 	pthread_mutex_unlock(&philo->data->modif);
@@ -94,7 +93,7 @@ static int	final_print_timestamp(t_philo *philo, char *str, long time)
 	}
 	else
 	{
-		pthread_mutex_lock(&philo->data->mutex);	
+		pthread_mutex_lock(&philo->data->mutex);
 		time = ft_get_time();
 		printf("%ld %d has taken a fork\n", \
 		time - philo->creation_time, philo->num);
@@ -103,11 +102,11 @@ static int	final_print_timestamp(t_philo *philo, char *str, long time)
 	return (0);
 }
 
-long	ft_get_time()
+long	ft_get_time(void)
 {
-	struct timeval checktv;
-	long	time;
-	
+	struct timeval	checktv;
+	long			time;
+
 	if (gettimeofday(&checktv, NULL) == -1)
 		return (-1);
 	time = (checktv.tv_usec * 0.001 + checktv.tv_sec * 1000);

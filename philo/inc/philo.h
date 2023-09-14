@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 18:19:24 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/08 19:45:23 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/14 23:45:21 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ typedef struct s_data {
 typedef struct s_philo {
 	t_data			*data;
 	pthread_t		tid;
+	int				done;
 	int				num;
 	int				alive;
 	int				nbr_of_meals;
 	long			last_meal;
 	long			creation_time;
-	pthread_mutex_t mutex;
+	pthread_mutex_t	mutex;
 }	t_philo;
 
 //ft_atoi.c
@@ -72,7 +73,7 @@ int		devourer(t_philo *philo, int num);
 
 //rest.c
 int		ft_sleep(t_philo *philo);
-int		ft_usleep(t_philo *philo, int	rest);
+int		ft_usleep(t_philo *philo, int rest);
 
 //death.c
 int		is_anyone_dead(t_philo *philo);
@@ -81,7 +82,7 @@ void	kill_philo(t_philo *philo);
 
 //print_timestamp.c
 int		print_timestamp(t_philo *philo, char *str);
-long	ft_get_time();
+long	ft_get_time(void);
 
 //philo.c
 void	do_philosophers(t_data *data);
