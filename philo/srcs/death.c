@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:30:20 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/14 23:27:41 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:39:08 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	is_anyone_dead(t_philo *philo)
 		philo->alive = DEAD;
 		philo->data->death = DEAD;
 		return (DEAD);
-	}	
+	}
 	return (ALIVE);
 }
 
