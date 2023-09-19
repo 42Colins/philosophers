@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:51 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/14 23:44:45 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:09:28 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,6 @@ void	handle_philos(t_philo *philo)
 		}
 		pthread_mutex_unlock(&philo->data->modif);
 		routine(philo);
-		pthread_mutex_lock(&philo->data->modif);
-		if ((philo->nbr_of_meals == philo->data->nbr_of_dinner) && \
-			philo->done == 0)
-		{
-			philo->data->done_dinners += 1;
-			philo->done = 1;
-		}
-		pthread_mutex_unlock(&philo->data->modif);
 	}
 	if (philo->alive == DEAD)
 		print_timestamp(philo, "DEATH");

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:25:20 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/02 19:31:30 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 12:50:54 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	check_args(char **argv, int argc);
+static int	check_args(char **argv);
 static int	is_num(char *str);
 static int	ft_isdigit(int c);
 
@@ -26,7 +26,7 @@ int	main(int ac, char **av)
 		return (printf("Wrong number of arguments\n"), 1);
 	else
 	{
-		if (check_args(av, ac) == DEAD)
+		if (check_args(av) == DEAD)
 			return (printf("Error in one of the arguments\n"), 1);
 		data = handle_parameters(count, av);
 		do_philosophers(data);
@@ -35,14 +35,15 @@ int	main(int ac, char **av)
 	return (0);
 }
 
-static int	check_args(char **argv, int argc)
+static int	check_args(char **argv)
 {
 	int	i;
 
 	i = 1;
-	while (i <= argc)
+	while (argv[i])
 	{
-		if (is_num(argv[i]) == ALIVE)
+		if (is_num(argv[i]) == ALIVE && \
+			(0 < ft_atoi(argv[i]) && ft_atoi(argv[i]) <= 2147483647))
 			i++;
 		else
 			return (DEAD);

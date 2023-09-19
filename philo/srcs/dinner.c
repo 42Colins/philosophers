@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dinner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:28:36 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/14 23:27:41 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:10:57 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ int	devourer(t_philo *philo, int num)
 	if ((philo->data->nbr_of_dinner != -1 && \
 		(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
 		(philo->data->death == DEAD))
+		return (pthread_mutex_unlock(&philo->data->modif), -1);
+	if ((philo->nbr_of_meals == philo->data->nbr_of_dinner) && \
+		philo->done == 0)
 	{
-		pthread_mutex_unlock(&philo->data->modif);
-		return (-1);
+		philo->data->done_dinners += 1;
+		philo->done = 1;
 	}
-	pthread_mutex_unlock(&philo->data->modif);
-	return (0);
+	return (pthread_mutex_unlock(&philo->data->modif), 0);
 }
