@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:36:05 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/18 15:59:19 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 15:36:17 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,19 @@ void	do_philosophers(t_data *data)
 	pthread_mutex_init(&mutex, NULL);
 	i = 0;
 	philo = initiate_philos(data, mutex);
+	pthread_mutex_lock(&mutex);
 	while (i < data->nbr_of_philos)
 	{
 		if (pthread_create(&philo[i].tid, NULL, \
 			(void *)handle_philos, &philo[i]) != 0)
+		{
+			pthread_mutex_unlock(&mutex);
 			return ;
+		}
 		else
 			i++;
 	}
+	pthread_mutex_unlock(&mutex);
 	i = 0;
 	while (i < data->nbr_of_philos)
 	{
@@ -75,9 +80,9 @@ t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex)
 		philo[index].last_meal = 0;
 		philo[index].nbr_of_meals = 0;
 		philo[index].alive = ALIVE;
+		philo[index].mutex = mutex;
 		index++;
 	}
-	philo->mutex = mutex;
 	return (philo);
 }
 

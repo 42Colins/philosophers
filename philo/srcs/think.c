@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:30 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/19 13:11:28 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 17:25:33 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,8 @@ static int	take_fork(t_philo *philo, int num, int oldnum);
 
 int	freud(t_philo *philo, int num)
 {
-	pthread_mutex_lock(&philo->data->modif);
-	if ((philo->data->nbr_of_dinner != -1 && \
-		(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
-		(philo->data->death == DEAD))
-	{
-		pthread_mutex_unlock(&philo->data->modif);
+	if (is_dead(philo) == DEAD)
 		return (-1);
-	}
-	pthread_mutex_unlock(&philo->data->modif);
 	if (search_fork(philo, num) == -1)
 		return (-1);
 	return (0);
@@ -50,16 +43,13 @@ static int	take_fork(t_philo *philo, int num, int oldnum)
 {
 	while (1)
 	{
-		pthread_mutex_lock(&philo->data->modif);
-		if ((philo->data->nbr_of_dinner != -1 && \
-			(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
-			(philo->data->death == DEAD) || (is_anyone_dead(philo) == DEAD))
+		if (is_dead(philo) == DEAD)
 		{
 			if (oldnum != -1 && philo->data->forks[oldnum] != FREE)
 				philo->data->forks[oldnum] = FREE;
-			pthread_mutex_unlock(&philo->data->modif);
-			return (-1);
+			return (DEAD);
 		}
+		pthread_mutex_lock(&philo->data->modif);
 		if (philo->data->forks[num] == FREE)
 		{
 			pthread_mutex_unlock(&philo->data->modif);

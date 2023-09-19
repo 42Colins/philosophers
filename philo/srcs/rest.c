@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:28:49 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/18 17:37:05 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 17:02:04 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,8 @@ int	ft_usleep(t_philo *philo, int rest)
 		tmp = ft_get_time();
 		if (tmp >= start_time + rest)
 			break ;
-		pthread_mutex_lock(&philo->data->modif);
-		if ((philo->data->nbr_of_dinner != -1 && \
-			(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
-			(philo->data->death == DEAD))
-		{
-			pthread_mutex_unlock(&philo->data->modif);
-			return (-1);
-		}
-		pthread_mutex_unlock(&philo->data->modif);
+		if (is_dead(philo) == DEAD)
+			return (DEAD);
 		usleep(200);
 		tmp = ft_get_time();
 	}

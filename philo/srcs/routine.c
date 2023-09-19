@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:51 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/19 13:09:28 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 17:28:27 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,13 @@ static void	routine(t_philo *philo);
 
 void	handle_philos(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->mutex);
+	pthread_mutex_unlock(&philo->mutex);	
 	philo->done = 0;
 	while (1)
 	{
-		pthread_mutex_lock(&philo->data->modif);
-		if ((philo->data->nbr_of_dinner != -1 && \
-			(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
-			(philo->data->death == DEAD))
-		{
-			pthread_mutex_unlock(&philo->data->modif);
+		if (is_dead(philo) == DEAD)
 			break ;
-		}
-		pthread_mutex_unlock(&philo->data->modif);
 		routine(philo);
 	}
 	if (philo->alive == DEAD)

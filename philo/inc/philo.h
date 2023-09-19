@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 18:19:24 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/14 23:45:21 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 15:51:42 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int		ft_usleep(t_philo *philo, int rest);
 int		is_anyone_dead(t_philo *philo);
 int		do_i_have_time(t_philo *philo, int time);
 void	kill_philo(t_philo *philo);
+int		is_dead(t_philo *philo);
 
 //print_timestamp.c
 int		print_timestamp(t_philo *philo, char *str);

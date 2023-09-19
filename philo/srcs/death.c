@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:30:20 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/18 15:39:08 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/19 17:17:22 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	is_anyone_dead(t_philo *philo)
 	{
 		philo->alive = DEAD;
 		philo->data->death = DEAD;
+		printf("t : %ld, death : %d\n", (time - philo->last_meal), philo->data->death_timer);
 		return (DEAD);
 	}
 	return (ALIVE);
@@ -47,13 +48,11 @@ int	do_i_have_time(t_philo *philo, int mode)
 	t = (checktv.tv_usec * 0.001 + checktv.tv_sec * 1000);
 	if (philo->last_meal == 0)
 		philo->last_meal = philo->creation_time;
-	pthread_mutex_lock(&philo->data->modif);
-	if ((philo->data->nbr_of_dinner != -1 && \
-		(philo->data->done_dinners == philo->data->nbr_of_philos)))
-		return (pthread_mutex_unlock(&philo->data->modif), DEAD);
-	pthread_mutex_unlock(&philo->data->modif);
+	if (is_dead(philo) == DEAD)
+		return (DEAD);
 	if ((t - philo->last_meal + time) > philo->data->death_timer)
 	{
+		puts("samere");
 		usleep((philo->data->death_timer - (t - philo->last_meal)) * 1000);
 		kill_philo(philo);
 		return (philo->alive = DEAD, DEAD);
@@ -66,4 +65,14 @@ void	kill_philo(t_philo *philo)
 	pthread_mutex_lock(&philo->data->modif);
 	philo->data->death = 1;
 	pthread_mutex_unlock(&philo->data->modif);
+}
+
+int	is_dead(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->modif);
+	if ((philo->data->nbr_of_dinner != -1 && \
+		(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
+		((philo->data->death == DEAD) && philo->data->count > 0))
+		return (pthread_mutex_unlock(&philo->data->modif), DEAD);
+	return (pthread_mutex_unlock(&philo->data->modif), ALIVE);
 }
