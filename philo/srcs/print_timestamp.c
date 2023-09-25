@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:38:13 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 19:57:53 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:22:56 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	print_timestamp(t_philo *philo, int value)
 	time = 0;
 	if (value == DEATH && philo->data->count == 0)
 	{
-		ft_print(value, philo);
+		ft_print(DYING, philo);
 		pthread_mutex_lock(&philo->data->modif);
 		philo->data->count = 1;
 		pthread_mutex_unlock(&philo->data->modif);
@@ -43,7 +43,7 @@ static int	next_print_timestamp(t_philo *philo, int value, long time)
 		time = ft_get_time();
 		if (do_i_have_time(philo, 1) == DEAD)
 			return (-1);
-		ft_print(value, philo);
+		ft_print(SLEEPING, philo);
 		return (0);
 	}
 	return (next_next_print_timestamp(philo, value, time));
@@ -59,7 +59,7 @@ static int	next_next_print_timestamp(t_philo *philo, int value, long time)
 		philo->last_meal = time;
 		if (do_i_have_time(philo, 0) == DEAD)
 			return (DEAD);
-		ft_print(value, philo);
+		ft_print(EATING, philo);
 	}
 	else
 		return (final_print_timestamp(philo, value));
@@ -72,13 +72,13 @@ static int	final_print_timestamp(t_philo *philo, int value)
 	{
 		if (is_dead(philo) == DEAD)
 			return (DEAD);
-		ft_print(value, philo);
+		ft_print(THINKING, philo);
 	}
 	else
 	{
 		if (is_dead(philo) == DEAD)
 			return (DEAD);
-		ft_print(value, philo);
+		ft_print(FORKING, philo);
 	}
 	return (0);
 }
@@ -94,7 +94,7 @@ long	ft_get_time(void)
 	return (time);
 }
 
-void	ft_print(int value, t_philo *philo)
+void	ft_print(char *str, t_philo *philo)
 {
 	long	time;
 	long	tmp;
@@ -109,15 +109,6 @@ void	ft_print(int value, t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->data->death_mutex);
 	pthread_mutex_lock(&philo->data->print);
-	if (value == THINK)
-		printf("%ld %d is thinking\n", tmp, philo->num);
-	else if (value == EAT)
-		printf("%ld %d is eating\n", tmp, philo->num);
-	else if (value == SLEEP)
-		printf("%ld %d is sleeping\n", tmp, philo->num);
-	else if (value == DEATH)
-		printf("\033[0;31m%ld %d died\n", tmp, philo->num);
-	else if (value == FORK)
-		printf("%ld %d has taken a fork\n", tmp, philo->num);
+	printf(str, tmp, philo->num);
 	pthread_mutex_unlock(&philo->data->print);
 }

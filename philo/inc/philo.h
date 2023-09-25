@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 18:19:24 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:00:14 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:23:30 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+# define THINKING "%ld %d is thinking\n"
+# define EATING "%ld %d is eating\n"
+# define SLEEPING "%ld %d is sleeping\n"
+# define DYING "%ld %d is dead\n"
+# define FORKING "%ld %d has taken a fork\n"
 
 enum e_status {
 	FREE,
@@ -92,7 +98,7 @@ int		is_dead(t_philo *philo);
 
 //print_timestamp.c
 int		print_timestamp(t_philo *philo, int value);
-void	ft_print(int value, t_philo *philo);
+void	ft_print(char *str, t_philo *philo);
 long	ft_get_time(void);
 
 //philo.c
