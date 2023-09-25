@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:30 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:08:09 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:40:33 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	search_fork(t_philo *philo, int num)
 {
 	int	right_num;
 
-	if (num + 1 == philo->data->nbr_of_philos)
+	if (philo->num == philo->data->nbr_of_philos)
 		right_num = 0;
 	else
 		right_num = num + 1;

@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:28:49 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:11:52 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:42:05 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_usleep(t_philo *philo, int rest)
 		usleep(200);
 		tmp = ft_get_time();
 	}
-	// printf("%ld , %d\n", tmp - start_time, rest);
+	printf("%ld , %d\n", tmp - start_time, rest);
 	return (0);
 }
 

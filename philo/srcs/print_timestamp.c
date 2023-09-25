@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:38:13 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:22:56 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:33:43 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,6 @@ void	ft_print(char *str, t_philo *philo)
 	long	time;
 	long	tmp;
 
-	time = ft_get_time();
-	tmp = time - philo->creation_time;
 	pthread_mutex_lock(&philo->data->death_mutex);
 	if (philo->data->count == 1)
 	{
@@ -109,6 +107,8 @@ void	ft_print(char *str, t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->data->death_mutex);
 	pthread_mutex_lock(&philo->data->print);
+	time = ft_get_time();
+	tmp = time - philo->creation_time;
 	printf(str, tmp, philo->num);
 	pthread_mutex_unlock(&philo->data->print);
 }
