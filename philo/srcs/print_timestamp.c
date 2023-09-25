@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_timestamp.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:38:13 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 18:21:24 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 19:57:53 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,12 @@ int	print_timestamp(t_philo *philo, int value)
 	long			time;
 
 	time = 0;
-	// if (is_dead(philo) == DEAD)
-	// 	return (DEAD);
-	// printf("%d\n", philo->data->count);
-	pthread_mutex_lock(&philo->data->modif);
 	if (value == DEATH && philo->data->count == 0)
 	{
+		ft_print(value, philo);
+		pthread_mutex_lock(&philo->data->modif);
 		philo->data->count = 1;
 		pthread_mutex_unlock(&philo->data->modif);
-		ft_print(value, philo);
 		return (0);
 	}
 	else
@@ -101,10 +98,17 @@ void	ft_print(int value, t_philo *philo)
 {
 	long	time;
 	long	tmp;
-	
+
 	time = ft_get_time();
 	tmp = time - philo->creation_time;
-	pthread_mutex_lock(&philo->data->mutex);
+	pthread_mutex_lock(&philo->data->death_mutex);
+	if (philo->data->count == 1)
+	{
+		pthread_mutex_unlock(&philo->data->death_mutex);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->death_mutex);
+	pthread_mutex_lock(&philo->data->print);
 	if (value == THINK)
 		printf("%ld %d is thinking\n", tmp, philo->num);
 	else if (value == EAT)
@@ -115,5 +119,5 @@ void	ft_print(int value, t_philo *philo)
 		printf("\033[0;31m%ld %d died\n", tmp, philo->num);
 	else if (value == FORK)
 		printf("%ld %d has taken a fork\n", tmp, philo->num);
-	pthread_mutex_unlock(&philo->data->mutex);
+	pthread_mutex_unlock(&philo->data->print);
 }

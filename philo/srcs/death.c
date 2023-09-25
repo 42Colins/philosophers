@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:30:20 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 16:50:46 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 19:44:29 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	do_i_have_time(t_philo *philo, int mode)
 		return (DEAD);
 	if ((t - philo->last_meal + time) > philo->data->death_timer)
 	{
-		// puts("samere");
 		usleep((philo->data->death_timer - (t - philo->last_meal)) * 1000);
 		kill_philo(philo);
 		return (DEAD);
@@ -59,18 +58,18 @@ int	do_i_have_time(t_philo *philo, int mode)
 
 void	kill_philo(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->modif);
+	pthread_mutex_lock(&philo->data->death_mutex);
 	philo->data->death = 1;
-	pthread_mutex_unlock(&philo->data->modif);
+	pthread_mutex_unlock(&philo->data->death_mutex);
 	philo->alive = DEAD;
 }
 
 int	is_dead(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->modif);
+	pthread_mutex_lock(&philo->data->death_mutex);
 	if ((philo->data->nbr_of_dinner != -1 && \
 		(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
 		(philo->data->death == DEAD))
-		return (pthread_mutex_unlock(&philo->data->modif), DEAD);
-	return (pthread_mutex_unlock(&philo->data->modif), ALIVE);
+		return (pthread_mutex_unlock(&philo->data->death_mutex), DEAD);
+	return (pthread_mutex_unlock(&philo->data->death_mutex), ALIVE);
 }

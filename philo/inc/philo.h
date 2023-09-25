@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 18:19:24 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 17:36:05 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:00:14 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ typedef struct s_data {
 	int				nbr_of_philos;
 	int				*forks;
 	pthread_mutex_t	modif;
-	pthread_mutex_t	mutex;
+	pthread_mutex_t	death_mutex;
+	pthread_mutex_t	print;
 	pthread_mutex_t	*forchetta;
 }	t_data;
 
@@ -97,7 +98,6 @@ long	ft_get_time(void);
 //philo.c
 void	do_philosophers(t_data *data);
 void	free_everything(t_data *data);
-t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex);
 t_data	*handle_parameters(int count, char **values);
 
 #endif

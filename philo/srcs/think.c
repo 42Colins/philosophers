@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   think.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:30 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 17:35:35 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:08:09 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	take_fork(t_philo *philo, int num, int oldnum)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->data->modif);
-		// usleep(100);
+		usleep(50);
 	}
 	print_timestamp(philo, FORK);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:51 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 18:16:29 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:03:26 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void	handle_philos(t_philo *philo)
 	pthread_mutex_lock(&philo->mutex);
 	pthread_mutex_unlock(&philo->mutex);
 	philo->done = 0;
-	if ((philo->last_meal == 0) && philo->num % 2 == 0)
+	if ((philo->last_meal == 0) && philo->num % 2 == 1)
 		usleep(2000);
+	// usleep(philo->num * 5);
 	while (1)
 	{
-		// printf("%d\n", is_dead(philo));
 		if (is_dead(philo) == DEAD)
 			break ;
 		routine(philo);

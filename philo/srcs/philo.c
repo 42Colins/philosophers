@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:36:05 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 18:16:36 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:02:28 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 // static void	join_philo(t_data *data, t_philo **philo);
+static t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex);
 
 void	do_philosophers(t_data *data)
 {
@@ -21,6 +22,7 @@ void	do_philosophers(t_data *data)
 	t_philo			*philo;
 
 	pthread_mutex_init(&mutex, NULL);
+	pthread_mutex_init(&data->death_mutex, NULL);
 	i = 0;
 	philo = initiate_philos(data, mutex);
 	pthread_mutex_lock(&mutex);
@@ -73,7 +75,7 @@ void	free_everything(t_data *data)
 	free(data);
 }
 
-t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex)
+static t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex)
 {
 	int				index;
 	t_philo			*philo;
@@ -113,7 +115,7 @@ t_data	*handle_parameters(int count, char **values)
 	data->sleep_time = ft_atoi(values[4]);
 	data->eat_time = ft_atoi(values[3]);
 	data->death_timer = ft_atoi(values[2]);
-	pthread_mutex_init(&data->mutex, NULL);
+	pthread_mutex_init(&data->print, NULL);
 	forks = malloc(sizeof(pthread_mutex_t) * data->nbr_of_philos);
 	disponibility = malloc(sizeof(int) * data->nbr_of_philos);
 	index = 0;
