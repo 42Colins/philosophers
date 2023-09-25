@@ -6,11 +6,13 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:36:05 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/19 15:36:17 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 18:16:36 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+// static void	join_philo(t_data *data, t_philo **philo);
 
 void	do_philosophers(t_data *data)
 {
@@ -34,6 +36,7 @@ void	do_philosophers(t_data *data)
 			i++;
 	}
 	pthread_mutex_unlock(&mutex);
+	// join_philo(data, &philo);
 	i = 0;
 	while (i < data->nbr_of_philos)
 	{
@@ -42,6 +45,18 @@ void	do_philosophers(t_data *data)
 	}
 	free(philo);
 }
+
+// static void	join_philo(t_data *data, t_philo **philo)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < data->nbr_of_philos)
+// 	{
+// 		pthread_join(philo[i]->tid, NULL);
+// 		i++;
+// 	}
+// }
 
 void	free_everything(t_data *data)
 {
@@ -61,14 +76,11 @@ void	free_everything(t_data *data)
 t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex)
 {
 	int				index;
-	long			time;
 	t_philo			*philo;
-	struct timeval	tv;
+	long			time;
 
-	if (gettimeofday(&tv, NULL) == -1)
-		return (NULL);
-	time = (tv.tv_usec * 0.001 + tv.tv_sec * 1000);
 	index = 0;
+	time = ft_get_time();
 	philo = malloc(sizeof(t_philo) * data->nbr_of_philos);
 	if (!philo)
 		return (NULL);
@@ -76,11 +88,11 @@ t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex)
 	{
 		philo[index].data = data;
 		philo[index].num = index + 1;
-		philo[index].creation_time = time;
 		philo[index].last_meal = 0;
 		philo[index].nbr_of_meals = 0;
 		philo[index].alive = ALIVE;
 		philo[index].mutex = mutex;
+		philo[index].creation_time = time;
 		index++;
 	}
 	return (philo);

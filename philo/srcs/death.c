@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:30:20 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/19 17:17:22 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 16:50:46 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,15 @@ int	is_anyone_dead(t_philo *philo)
 {
 	long			time;
 
-	if ((philo->data->nbr_of_dinner != -1 && \
-		(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
-		(philo->data->death == DEAD))
+	if (is_dead(philo) == DEAD)
 		return (DEAD);
 	if (philo->last_meal == 0)
 		philo->last_meal = philo->creation_time;
 	time = ft_get_time();
 	if ((time - philo->last_meal) > philo->data->death_timer)
 	{
-		philo->alive = DEAD;
-		philo->data->death = DEAD;
-		printf("t : %ld, death : %d\n", (time - philo->last_meal), philo->data->death_timer);
+		// printf("t : %ld, death : %d\n", (time - philo->last_meal), philo->data->death_timer);
+		kill_philo(philo);
 		return (DEAD);
 	}
 	return (ALIVE);
@@ -52,10 +49,10 @@ int	do_i_have_time(t_philo *philo, int mode)
 		return (DEAD);
 	if ((t - philo->last_meal + time) > philo->data->death_timer)
 	{
-		puts("samere");
+		// puts("samere");
 		usleep((philo->data->death_timer - (t - philo->last_meal)) * 1000);
 		kill_philo(philo);
-		return (philo->alive = DEAD, DEAD);
+		return (DEAD);
 	}
 	return (ALIVE);
 }
@@ -65,6 +62,7 @@ void	kill_philo(t_philo *philo)
 	pthread_mutex_lock(&philo->data->modif);
 	philo->data->death = 1;
 	pthread_mutex_unlock(&philo->data->modif);
+	philo->alive = DEAD;
 }
 
 int	is_dead(t_philo *philo)
@@ -72,7 +70,7 @@ int	is_dead(t_philo *philo)
 	pthread_mutex_lock(&philo->data->modif);
 	if ((philo->data->nbr_of_dinner != -1 && \
 		(philo->data->done_dinners == philo->data->nbr_of_philos)) || \
-		((philo->data->death == DEAD) && philo->data->count > 0))
+		(philo->data->death == DEAD))
 		return (pthread_mutex_unlock(&philo->data->modif), DEAD);
 	return (pthread_mutex_unlock(&philo->data->modif), ALIVE);
 }

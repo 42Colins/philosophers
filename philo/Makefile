@@ -6,13 +6,13 @@
 #    By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/01 14:11:17 by ajakubcz          #+#    #+#              #
-#    Updated: 2023/09/02 22:46:24 by cprojean         ###   ########.fr        #
+#    Updated: 2023/09/25 15:52:02 by cprojean         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror
 
 RM = $(RM) -f
 
@@ -47,7 +47,7 @@ $(DIR_OBJ)%.o: %.c $(HEADERS)
 				$(CC) $(CFLAGS) -I inc -c $< -o $@
 
 $(NAME) :		$(OBJS)
-				$(CC) $(OBJS) -lpthread -o $(NAME) -g3
+				$(CC) $(OBJS) -lpthread -o $(NAME) $(CFLAGS)
 clean :
 				$(RM) $(OBJS)
 

@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:30 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/19 17:25:33 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:35:35 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ static int	search_fork(t_philo *philo, int num)
 		right_num = 0;
 	else
 		right_num = num + 1;
-	if (take_fork(philo, num, -1) == -1)
+	if (take_fork(philo, num, -1) == DEAD)
 		return (-1);
-	if (take_fork(philo, right_num, num) == -1)
+	if (take_fork(philo, right_num, num) == DEAD)
 		return (-1);
 	return (0);
 }
@@ -43,8 +43,9 @@ static int	take_fork(t_philo *philo, int num, int oldnum)
 {
 	while (1)
 	{
-		if (is_dead(philo) == DEAD)
+		if (is_dead(philo) == DEAD || is_anyone_dead(philo) == DEAD)
 		{
+			// puts("dead");
 			if (oldnum != -1 && philo->data->forks[oldnum] != FREE)
 				philo->data->forks[oldnum] = FREE;
 			return (DEAD);
@@ -59,7 +60,8 @@ static int	take_fork(t_philo *philo, int num, int oldnum)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->data->modif);
+		// usleep(100);
 	}
-	print_timestamp(philo, NULL);
+	print_timestamp(philo, FORK);
 	return (0);
 }

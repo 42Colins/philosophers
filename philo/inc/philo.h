@@ -6,7 +6,7 @@
 /*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 18:19:24 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/19 15:51:42 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:36:05 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ enum e_status {
 enum e_life {
 	ALIVE,
 	DEAD
+};
+
+enum e_activity {
+	THINK,
+	EAT,
+	SLEEP,
+	DEATH,
+	FORK
 };
 
 typedef struct s_data {
@@ -82,7 +90,8 @@ void	kill_philo(t_philo *philo);
 int		is_dead(t_philo *philo);
 
 //print_timestamp.c
-int		print_timestamp(t_philo *philo, char *str);
+int		print_timestamp(t_philo *philo, int value);
+void	ft_print(int value, t_philo *philo);
 long	ft_get_time(void);
 
 //philo.c
