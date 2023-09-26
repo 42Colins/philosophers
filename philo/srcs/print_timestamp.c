@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   print_timestamp.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:38:13 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:33:43 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/26 12:31:02 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 static int	next_print_timestamp(t_philo *philo, int value, long time);
-static int	next_next_print_timestamp(t_philo *philo, int value, long time);
-static int	final_print_timestamp(t_philo *philo, int value);
 
 int	print_timestamp(t_philo *philo, int value)
 {
@@ -29,14 +27,7 @@ int	print_timestamp(t_philo *philo, int value)
 		pthread_mutex_unlock(&philo->data->modif);
 		return (0);
 	}
-	else
-		return (pthread_mutex_unlock(&philo->data->modif), \
-				next_print_timestamp(philo, value, time));
-}
-
-static int	next_print_timestamp(t_philo *philo, int value, long time)
-{
-	if (value == SLEEP)
+	else if (value == SLEEP)
 	{
 		if (is_dead(philo) == DEAD)
 			return (DEAD);
@@ -46,10 +37,11 @@ static int	next_print_timestamp(t_philo *philo, int value, long time)
 		ft_print(SLEEPING, philo);
 		return (0);
 	}
-	return (next_next_print_timestamp(philo, value, time));
+	else
+		return (next_print_timestamp(philo, value, time));
 }
 
-static int	next_next_print_timestamp(t_philo *philo, int value, long time)
+static int	next_print_timestamp(t_philo *philo, int value, long time)
 {
 	if (value == EAT)
 	{
@@ -61,14 +53,7 @@ static int	next_next_print_timestamp(t_philo *philo, int value, long time)
 			return (DEAD);
 		ft_print(EATING, philo);
 	}
-	else
-		return (final_print_timestamp(philo, value));
-	return (0);
-}
-
-static int	final_print_timestamp(t_philo *philo, int value)
-{
-	if (value == THINK)
+	else if (value == THINK)
 	{
 		if (is_dead(philo) == DEAD)
 			return (DEAD);

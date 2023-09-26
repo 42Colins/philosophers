@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   think.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:30 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:40:33 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/26 12:34:35 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ static int	take_fork(t_philo *philo, int num, int oldnum)
 {
 	while (1)
 	{
-		if (is_dead(philo) == DEAD || is_anyone_dead(philo) == DEAD)
+		if (is_dead(philo) == DEAD)
 		{
-			// puts("dead");
 			if (oldnum != -1 && philo->data->forks[oldnum] != FREE)
 				philo->data->forks[oldnum] = FREE;
 			return (DEAD);
@@ -60,7 +59,7 @@ static int	take_fork(t_philo *philo, int num, int oldnum)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->data->modif);
-		usleep(50);
+		usleep(100);
 	}
 	print_timestamp(philo, FORK);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:29:51 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:03:26 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/26 12:37:55 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	handle_philos(t_philo *philo)
 	philo->done = 0;
 	if ((philo->last_meal == 0) && philo->num % 2 == 1)
 		usleep(2000);
-	// usleep(philo->num * 5);
 	while (1)
 	{
 		if (is_dead(philo) == DEAD)
@@ -30,7 +29,6 @@ void	handle_philos(t_philo *philo)
 	}
 	if (philo->alive == DEAD)
 	{
-		printf("end : %d\n", philo->alive);
 		print_timestamp(philo, DEATH);
 	}
 }

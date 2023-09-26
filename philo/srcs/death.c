@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:30:20 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 19:44:29 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/26 12:38:47 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int	is_anyone_dead(t_philo *philo)
 	time = ft_get_time();
 	if ((time - philo->last_meal) > philo->data->death_timer)
 	{
-		// printf("t : %ld, death : %d\n", (time - philo->last_meal), philo->data->death_timer);
 		kill_philo(philo);
 		return (DEAD);
 	}
 	return (ALIVE);
 }
+// printf("t : %ld, death : %d\n", (time - philo->last_meal), philo->data->death_timer);
 
 int	do_i_have_time(t_philo *philo, int mode)
 {

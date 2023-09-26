@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:36:05 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:02:28 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/26 12:36:50 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// static void	join_philo(t_data *data, t_philo **philo);
+static void		join_philo(t_data *data, t_philo **philo);
 static t_philo	*initiate_philos(t_data *data, pthread_mutex_t mutex);
 
 void	do_philosophers(t_data *data)
@@ -38,27 +38,21 @@ void	do_philosophers(t_data *data)
 			i++;
 	}
 	pthread_mutex_unlock(&mutex);
-	// join_philo(data, &philo);
-	i = 0;
-	while (i < data->nbr_of_philos)
-	{
-		pthread_join(philo[i].tid, NULL);
-		i++;
-	}
+	join_philo(data, &philo);
 	free(philo);
 }
 
-// static void	join_philo(t_data *data, t_philo **philo)
-// {
-// 	int	i;
+static void	join_philo(t_data *data, t_philo **philo)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (i < data->nbr_of_philos)
-// 	{
-// 		pthread_join(philo[i]->tid, NULL);
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (i < data->nbr_of_philos)
+	{
+		pthread_join(philo[i]->tid, NULL);
+		i++;
+	}
+}
 
 void	free_everything(t_data *data)
 {

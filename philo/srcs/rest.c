@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rest.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cprojean <cprojean@42lyon.fr>              +#+  +:+       +#+        */
+/*   By: cprojean <cprojean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 19:28:49 by cprojean          #+#    #+#             */
-/*   Updated: 2023/09/25 20:42:05 by cprojean         ###   ########.fr       */
+/*   Updated: 2023/09/26 12:38:05 by cprojean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,3 @@ int	ft_usleep(t_philo *philo, int rest)
 	printf("%ld , %d\n", tmp - start_time, rest);
 	return (0);
 }
-
